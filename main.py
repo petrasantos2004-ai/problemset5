@@ -13,5 +13,20 @@ def shortest_shortest_path(graph, source):
       (shortest path weight, shortest path number of edges). See test case for example.
     """
     ### TODO
-    pass
+    # Plain Dijkstra, but the heap key is the pair (weight, edges).
+    # Python compares tuples left to right, so ties on weight are
+    # broken by the number of edges for free.
+    result = {}
+    frontier = [(0, 0, source)]
+    while frontier:
+        weight, edges, v = heappop(frontier)
+        if v in result:
+            # already settled with a better (or equal) pair
+            continue
+        result[v] = (weight, edges)
+        for neighbor, w in graph[v]:
+            if neighbor not in result:
+                heappush(frontier, (weight + w, edges + 1, neighbor))
+    return result
+
     
